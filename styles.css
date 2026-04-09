@@ -176,8 +176,8 @@ body{background:var(--bg);color:var(--tx);font-family:var(--fb);font-size:15px;l
 .qchev{font-size:10px;color:var(--t3);transition:transform .25s;flex-shrink:0;}
 .qi.open .qchev{transform:rotate(180deg);}
 .qans{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1);}
-.qi.open .qans{max-height:1600px;}
-.qans-in{padding:12px 16px 16px 52px;border-top:1px solid var(--b0);}
+.qi.open .qans{max-height:8000px;overflow-y:auto;}
+.qans-in{padding:12px 16px 16px 52px;border-top:1px solid var(--b0);max-height:none;overflow-y:visible;}
 @media(max-width:600px){.qans-in{padding:12px 14px 14px 14px;}}
 @media(max-width:480px){
   .qq{padding:12px 14px;gap:8px;}
