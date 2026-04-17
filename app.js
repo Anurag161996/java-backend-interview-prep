@@ -360,17 +360,19 @@ function setDiff(d) {
 
 function goHome() {
   // If viewing a topic, go back to section grid
-  // Otherwise, go to landing
   if (curTopic) {
     curTopic = null;
+    curDiff = 'all';
     document.getElementById('topicView').classList.remove('on');
     window.scrollTo(0, 0);
     if (curSection === 'frontend' || curSection === 'backend') {
       history.pushState({ section: curSection }, '', '#' + curSection);
+      renderGrid();
     } else {
       showLanding();
     }
   } else {
+    // Not viewing a topic, go to landing
     showLanding();
   }
 }
