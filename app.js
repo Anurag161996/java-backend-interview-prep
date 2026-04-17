@@ -159,9 +159,10 @@ function renderLanding() {
 
 function updateHeroSection() {
   const config = SECTION_CONFIG[curSection];
-  const hero = document.querySelector('.hero-chip');
-  const heroH1 = document.querySelector('.hero-inner h1');
-  const heroSub = document.querySelector('.hero-sub');
+  const homeView = document.getElementById('homeView');
+  const hero = homeView.querySelector('.hero-chip');
+  const heroH1 = homeView.querySelector('.hero-inner h1');
+  const heroSub = homeView.querySelector('.hero-sub');
 
   if (hero) hero.textContent = config.chip;
   if (heroH1) heroH1.innerHTML = config.heading;
