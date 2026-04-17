@@ -1436,7 +1436,7 @@ db1 === db2; // true — same instance (cached)</pre><br><strong>Module caching 
     // ── BATCH 14: Security, Debugging & Advanced ───────────────────────────
     {q:"What is Cross-Site Scripting (XSS) and how to prevent it?",d:"hard",
      a:"<strong>XSS attack:</strong> inject malicious scripts into webpage.<br><strong>Types:</strong> Stored (database), Reflected (URL), DOM-based.<br><br><strong>Prevention:</strong><ol><li>Escape/sanitize user input</li><li>Use textContent instead of innerHTML</li><li>CSP headers</li><li>DOMPurify library</li></ol><br><pre>// VULNERABLE
-elem.innerHTML = userInput; // if userInput = '<img src=x onerror="alert()">'  
+elem.innerHTML = userInput; // if userInput = '&lt;img src=x onerror=&quot;alert()&quot;&gt;'
 
 // SAFE
 elem.textContent = userInput; // displays as text
