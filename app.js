@@ -16,6 +16,36 @@ let curDiff   = 'all';
 window.addEventListener('DOMContentLoaded', () => {
   updateStats();
   renderGrid();
+  // Support deep links and page refresh with hash
+  const id = location.hash.slice(1);
+  if (id) {
+    curTopic = ALL_TOPICS.find(t => t.id === id);
+    if (curTopic) {
+      curDiff = 'all';
+      history.replaceState({ topicId: id }, '', '#' + id);
+      _activateTopic();
+    }
+  }
+});
+
+window.addEventListener('popstate', () => {
+  const id = location.hash.slice(1);
+  if (id) {
+    const topic = ALL_TOPICS.find(t => t.id === id);
+    if (topic) {
+      curTopic = topic;
+      curDiff = 'all';
+      document.getElementById('homeView').classList.add('off');
+      document.getElementById('topicView').classList.add('on');
+      window.scrollTo(0, 0);
+      renderTopic();
+      return;
+    }
+  }
+  document.getElementById('homeView').classList.remove('off');
+  document.getElementById('topicView').classList.remove('on');
+  curTopic = null;
+  window.scrollTo(0, 0);
 });
 
 function updateStats() {
@@ -85,15 +115,19 @@ function renderGrid() {
 }
 
 // ── TOPIC DETAIL ──────────────────────────────────────────────────────────────
+function _activateTopic() {
+  document.getElementById('homeView').classList.add('off');
+  document.getElementById('topicView').classList.add('on');
+  window.scrollTo(0, 0);
+  renderTopic();
+}
+
 function showTopic(id) {
   curTopic = ALL_TOPICS.find(t => t.id === id);
   if (!curTopic) return;
   curDiff = 'all';
-  document.getElementById('homeView').classList.add('off');
-  const tv = document.getElementById('topicView');
-  tv.classList.add('on');
-  window.scrollTo(0, 0);
-  renderTopic();
+  history.pushState({ topicId: id }, '', '#' + id);
+  _activateTopic();
 }
 
 function renderTopic() {
@@ -160,6 +194,7 @@ function setDiff(d) {
 }
 
 function goHome() {
+  history.pushState(null, '', location.pathname);
   document.getElementById('homeView').classList.remove('off');
   const tv = document.getElementById('topicView');
   tv.classList.remove('on');
