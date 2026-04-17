@@ -189,6 +189,29 @@ function updateStats() {
   if (meta) meta.textContent = total + '+ Q · ' + ALL_TOPICS.length + ' topics';
 }
 
+function updateSectionStats() {
+  // Update statsbar with section-specific counts
+  let sectionTopics = [];
+  if (curSection === 'frontend') {
+    sectionTopics = ALL_TOPICS.filter(t => TOPIC_SECTIONS.frontend.includes(t.id));
+  } else if (curSection === 'backend') {
+    sectionTopics = ALL_TOPICS.filter(t => TOPIC_SECTIONS.backend.includes(t.id));
+  }
+
+  const totalQuestions = sectionTopics.reduce((s, t) => s + t.qs.length, 0);
+  const totalTopics = sectionTopics.length;
+
+  const qEl = document.getElementById('totalQ');
+  if (qEl) qEl.textContent = totalQuestions + '+';
+
+  // Update the stats display
+  const statsbar = document.querySelector('.statsbar');
+  if (statsbar) {
+    const topicsEl = statsbar.querySelector('.sbi:nth-child(2) .sbn');
+    if (topicsEl) topicsEl.textContent = totalTopics;
+  }
+}
+
 // ── GRID ─────────────────────────────────────────────────────────────────────
 function renderGrid() {
   const q  = (document.getElementById('gSearch')?.value || '').trim().toLowerCase();
@@ -201,6 +224,9 @@ function renderGrid() {
 
   // Update filter buttons based on section
   updateFilterButtons();
+
+  // Update stats for current section
+  updateSectionStats();
 
   // Filter topics by section
   let topics = curSection === 'frontend'
