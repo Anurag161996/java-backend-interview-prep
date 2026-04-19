@@ -6,6 +6,22 @@
 <title>Frontend & Backend Interview Questions — InterviewPrep</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
+<!-- Apply theme before render to avoid flash -->
+<script>
+  (function(){try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light-init');}catch(e){}}());
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-122HCTD02W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-122HCTD02W', {
+    'anonymize_ip': true,
+    'allow_google_signals': false,
+    'allow_ad_personalization_signals': false
+  });
+</script>
 </head>
 <body>
 
@@ -16,7 +32,13 @@
     <span class="nsearch-icon">⌕</span>
     <input type="text" id="gSearch" placeholder="Search topics or questions…" oninput="onSearch()" autocomplete="off"/>
   </div>
-  <span class="nmeta" id="navMeta">0 Q · 25 topics</span>
+  <div class="nav-actions">
+    <button id="themeBtn" class="nav-icon-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    <button class="nav-icon-btn bm-nav-btn" onclick="showBookmarks()" title="Bookmarks">
+      <span>⭐</span><span class="bm-badge" id="bmBadge" style="display:none">0</span>
+    </button>
+    <span class="nmeta" id="navMeta">0 Q · 25 topics</span>
+  </div>
 </nav>
 
 <!-- APP -->
@@ -56,12 +78,6 @@
         <p class="hero-sub">Master 670+ interview questions across 25 core backend topics — from Java fundamentals to AI integration.</p>
         <div class="filter-row" id="filterRow">
           <button class="fp on" onclick="setF('all',this)">All</button>
-          <button class="fp" onclick="setF('java',this)">Java Core</button>
-          <button class="fp" onclick="setF('spring',this)">Spring</button>
-          <button class="fp" onclick="setF('data',this)">Data &amp; DB</button>
-          <button class="fp" onclick="setF('infra',this)">Infra &amp; Cloud</button>
-          <button class="fp" onclick="setF('arch',this)">Architecture</button>
-          <button class="fp" onclick="setF('test',this)">Testing</button>
         </div>
       </div>
     </div>
@@ -75,6 +91,7 @@
     <div class="wrap">
       <div class="sec-row">
         <span class="sec-lbl" id="gridLbl">All Topics — 0</span>
+        <button class="quiz-grid-btn" onclick="openQuizSetup(null)">🎯 Custom Quiz</button>
       </div>
       <div class="tgrid" id="topicGrid"></div>
     </div>
@@ -88,6 +105,122 @@
     </div>
   </div>
 
+  <!-- BOOKMARKS VIEW -->
+  <div id="bookmarkView" class="off">
+    <div class="wrap" style="padding-top:80px;">
+      <div class="bm-view-hdr">
+        <button class="back" onclick="goHome()">← Back</button>
+        <div class="bm-view-title-row">
+          <h2 class="bm-view-title">⭐ Bookmarks</h2>
+          <button class="bm-clear-all-btn" onclick="clearAllBookmarks()">Clear All</button>
+        </div>
+      </div>
+      <div id="bmContent"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- QUIZ CARD CONTAINER -->
+<div id="quizCardContainer" class="quiz-card-container off">
+  <div class="quiz-card-overlay"></div>
+
+  <!-- Setup Card -->
+  <div id="quizSetupCard" class="quiz-card">
+    <div class="quiz-card-header">
+      <h2>🎯 Create Your Quiz</h2>
+      <button class="quiz-card-close" onclick="closeQuiz()">✕</button>
+    </div>
+    <div class="quiz-setup-body">
+      <div class="quiz-section-label">Select Topics</div>
+      <div id="quizTopicList" class="quiz-topic-list"></div>
+
+      <div class="quiz-section-label">Number of Questions</div>
+      <div class="quiz-opts-row" id="quizCountOpts">
+        <button class="qopt" onclick="selectQuizCount(10,this)">🔥 10</button>
+        <button class="qopt on" onclick="selectQuizCount(20,this)">⚡ 20</button>
+        <button class="qopt" onclick="selectQuizCount(50,this)">💪 50</button>
+        <button class="qopt" onclick="selectQuizCount(9999,this)">🚀 All</button>
+      </div>
+
+      <div class="quiz-section-label">Difficulty</div>
+      <div class="quiz-opts-row" id="quizDiffOpts">
+        <button class="qopt on" onclick="selectQuizDiff('all',this)">All</button>
+        <button class="qopt easy-opt" onclick="selectQuizDiff('easy',this)">😌 Easy</button>
+        <button class="qopt medium-opt" onclick="selectQuizDiff('medium',this)">💭 Medium</button>
+        <button class="qopt hard-opt" onclick="selectQuizDiff('hard',this)">🔥 Hard</button>
+      </div>
+
+      <button class="quiz-start-btn" onclick="startQuiz()">Start Quiz →</button>
+    </div>
+  </div>
+
+  <!-- Question Card -->
+  <div id="quizQuestionCard" class="quiz-card off">
+    <div class="quiz-question-header">
+      <div class="quiz-streak-box" id="quizStreakBox"></div>
+      <button class="quiz-card-close" onclick="closeQuiz()">✕</button>
+    </div>
+
+    <div class="quiz-progress-container">
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizProgFill"></div></div>
+      <span class="quiz-counter" id="quizCounter">Q 1 of 20</span>
+    </div>
+
+    <div class="quiz-question-body">
+      <div class="quiz-topic-label" id="quizTopicLabel"></div>
+      <div class="quiz-q-text" id="quizQText"></div>
+
+      <button class="quiz-show-btn" id="quizShowBtn" onclick="showQuizAnswer()">Show Answer ▼</button>
+
+      <div class="quiz-ans-box off" id="quizAnsBox">
+        <div class="quiz-ans-in" id="quizAnsIn"></div>
+        <div class="quiz-mark-row">
+          <button class="qmark got" onclick="markAnswer(true)">✅ Got it</button>
+          <button class="qmark missed" onclick="markAnswer(false)">❌ Missed it</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="quizConfetti" class="quiz-confetti"></div>
+    <!-- Point Animation Container -->
+    <div id="quizPointsDisplay" class="quiz-points-display"></div>
+  </div>
+
+  <!-- Results Card -->
+  <div id="quizResultsCard" class="quiz-card off">
+    <div class="quiz-card-header">
+      <h2>🎉 Quiz Complete!</h2>
+      <button class="quiz-card-close" onclick="closeQuiz()">✕</button>
+    </div>
+
+    <div class="quiz-score-section" id="quizScore"></div>
+    <div id="quizAchievementBadge" class="quiz-achievement-badge"></div>
+    <div id="quizMissedList" class="quiz-missed-list"></div>
+
+    <div class="quiz-result-btns">
+      <button class="qrbtn" onclick="retakeQuiz()">🔁 Retake</button>
+      <button class="qrbtn qrbtn-sec" onclick="closeQuiz()">✕ Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRMATION MODAL -->
+<div id="confirmModal" class="modal-overlay off" onclick="confirmOverlayClick(event)">
+  <div class="modal-box confirm-modal-box">
+    <div class="confirm-header">
+      <div class="confirm-icon">🗑️</div>
+      <div class="confirm-text-wrap">
+        <h2 class="confirm-title">Delete Bookmarks?</h2>
+        <p class="confirm-message" id="confirmMessage"></p>
+      </div>
+    </div>
+    <div class="confirm-actions">
+      <button class="confirm-btn confirm-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="confirm-btn confirm-delete" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
 </div>
 
 <!-- Topic Data Files -->
@@ -126,7 +259,12 @@
 <!-- Next.js Topic -->
 <script src="data/nextjs.js"></script>
 
-<!-- Application Logic -->
+<!-- Application Logic - Modular Architecture -->
+<!-- Load order matters: analytics → bookmarks → quiz → ui → app -->
+<script src="js/analytics.js"></script>
+<script src="js/bookmarks.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/ui.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
