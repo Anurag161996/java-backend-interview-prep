@@ -189,9 +189,10 @@ window.addEventListener('DOMContentLoaded', function() {
       curTopic = topic;
       curDiff = 'all';
       updateSectionButtons();
-      renderTopic();
       document.getElementById('landingView').classList.add('off');
-      document.getElementById('homeView').classList.add('on');
+      document.getElementById('homeView').classList.add('off');
+      document.getElementById('topicView').classList.add('on');
+      renderTopic();
     } else {
       // No hash or unknown - show landing
       showLanding();
@@ -222,7 +223,7 @@ window.addEventListener('popstate', function() {
     curTopic = topic;
     curDiff = 'all';
     updateSectionButtons();
-    document.getElementById('homeView').classList.remove('off');
+    document.getElementById('homeView').classList.add('off');
     document.getElementById('topicView').classList.add('on');
     window.scrollTo(0, 0);
     renderTopic();
