@@ -367,7 +367,20 @@ function renderTopic() {
 function toggleQ(i) {
   var el = document.getElementById('qi-' + i);
   if (!el) return;
+  var wasOpen = el.classList.contains('open');
   el.classList.toggle('open');
+  if (!wasOpen) {
+    var qText = el.querySelector('.qtext');
+    var badge = el.querySelector('.dbadge');
+    trackEvent('question_expanded', {
+      'topic_id': curTopic ? curTopic.id : '',
+      'topic_name': curTopic ? curTopic.title : '',
+      'section': curSection || '',
+      'question_index': i + 1,
+      'question_text': qText ? qText.textContent.trim().substring(0, 100) : '',
+      'difficulty': badge ? badge.textContent.trim().toLowerCase() : ''
+    });
+  }
 }
 
 /**

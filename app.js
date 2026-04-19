@@ -128,11 +128,9 @@ function showTopic(id) {
     'topic_url': topicPath,
     'total_questions': curTopic.qs.length,
     'section': curSection,
-    'difficulty_breakdown': {
-      'easy': curTopic.qs.filter(function(q) { return q.d === 'easy'; }).length,
-      'medium': curTopic.qs.filter(function(q) { return q.d === 'medium'; }).length,
-      'hard': curTopic.qs.filter(function(q) { return q.d === 'hard'; }).length
-    }
+    'easy_count': curTopic.qs.filter(function(q) { return q.d === 'easy'; }).length,
+    'medium_count': curTopic.qs.filter(function(q) { return q.d === 'medium'; }).length,
+    'hard_count': curTopic.qs.filter(function(q) { return q.d === 'hard'; }).length
   });
 
   trackPageView(topicPath, curTopic.title);
