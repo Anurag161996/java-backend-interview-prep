@@ -28,7 +28,7 @@ function saveBookmarks(set) {
  * @returns {string} "topicId:q.id"
  */
 function makeBookmarkKey(topicId, q) {
-  return topicId + ':' + q.id;
+  return topicId + ':' + String(q.id);
 }
 
 /**
@@ -120,7 +120,7 @@ function renderBookmarks() {
     var qId = key.substring(colonIdx + 1);
     var topic = ALL_TOPICS.find(function(t) { return t.id === topicId; });
     if (!topic) { pruned.delete(key); return; }
-    var q = topic.qs.find(function(item) { return item.id === qId; });
+    var q = topic.qs.find(function(item) { return String(item.id) === qId; });
     if (!q) { pruned.delete(key); return; }   // orphan — remove silently
     if (!grouped[topicId]) grouped[topicId] = [];
     grouped[topicId].push({ q: q, key: key });
