@@ -62,6 +62,7 @@ function openQuizSetup(preselectedTopicId) {
   document.getElementById('quizQuestionCard').classList.add('off');
   document.getElementById('quizResultsCard').classList.add('off');
   document.getElementById('quizCardContainer').classList.remove('off');
+  document.body.classList.add('modal-open');
 }
 
 /**
@@ -69,6 +70,7 @@ function openQuizSetup(preselectedTopicId) {
  */
 function closeQuiz() {
   document.getElementById('quizCardContainer').classList.add('off');
+  document.body.classList.remove('modal-open');
 }
 
 /**
@@ -180,6 +182,10 @@ function showQuizQ() {
 
   // Update streak display
   updateStreakDisplay();
+
+  // Scroll card to top so question is visible
+  var card = document.getElementById('quizQuestionCard');
+  if (card) card.scrollTop = 0;
 }
 
 /**

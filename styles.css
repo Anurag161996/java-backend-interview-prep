@@ -414,6 +414,7 @@ body.light ::-webkit-scrollbar-thumb{background:var(--bg4);}
 .bm-clear-topic:hover{color:var(--r);border-color:rgba(248,113,113,.3);}
 
 /* ── QUIZ CARD CONTAINER ─────────────── */
+body.modal-open{overflow:hidden;}
 .quiz-card-container{position:fixed;inset:0;background:transparent;z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;animation:fadeIn .3s ease;}
 .quiz-card-container.off{display:none;}
 .quiz-card-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:-1;}
